@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Environment secrets
+.env
+*.env
+!.env.example
+
+# Flask / local runtime
+instance/
+*.log
+
+# Local databases / generated data
+*.sqlite
+*.sqlite3
+*.db
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node / frontend tooling if added later
+node_modules/
+dist/
+build/
+
+# Docker local overrides
+docker-compose.override.yml

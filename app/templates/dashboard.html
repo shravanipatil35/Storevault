@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-800">StoreVault Dashboard</h1>
+            <p class="text-sm text-gray-500 mt-1">At-a-glance overview of your store operations</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <a href="/products" class="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700">
+                <i class="fas fa-box"></i> Products
+            </a>
+            <a href="/sales/pos" class="inline-flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded shadow hover:bg-emerald-700">
+                <i class="fas fa-cash-register"></i> POS
+            </a>
+        </div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white p-5 rounded-lg shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="text-sm text-gray-500">Total Products</div>
+                    <div class="mt-2 text-2xl font-semibold text-gray-800">{{ total_products|default('—') }}</div>
+                </div>
+                <div class="text-blue-600 text-3xl">
+                    <i class="fas fa-box"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-lg shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="text-sm text-gray-500">Low Stock Items</div>
+                    <div class="mt-2 text-2xl font-semibold text-gray-800">{{ low_stock_count|default('—') }}</div>
+                </div>
+                <div class="text-yellow-500 text-3xl">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-lg shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="text-sm text-gray-500">Today's Sales</div>
+                    <div class="mt-2 text-2xl font-semibold text-gray-800">₹{{ today_sales|default(0)|round(2) }}</div>
+                </div>
+                <div class="text-emerald-600 text-3xl">
+                    <i class="fas fa-indian-rupee-sign"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-lg shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="text-sm text-gray-500">Suppliers</div>
+                    <div class="mt-2 text-2xl font-semibold text-gray-800">{{ suppliers_count|default('—') }}</div>
+                </div>
+                <div class="text-indigo-600 text-3xl">
+                    <i class="fas fa-truck"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions & Recent Products -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-sm">
+            <h3 class="text-lg font-semibold mb-4">Quick Actions</h3>
+            <div class="flex flex-col gap-3">
+                <a href="/products/add_product" class="flex items-center gap-3 px-4 py-2 border rounded hover:bg-gray-50">
+                    <i class="fas fa-plus text-blue-600 w-5"></i> Add Product
+                </a>
+                <a href="/products" class="flex items-center gap-3 px-4 py-2 border rounded hover:bg-gray-50">
+                    <i class="fas fa-box-open text-gray-700 w-5"></i> View Products
+                </a>
+                <a href="/sales/pos" class="flex items-center gap-3 px-4 py-2 border rounded hover:bg-gray-50">
+                    <i class="fas fa-cash-register text-emerald-600 w-5"></i> Open POS
+                </a>
+            </div>
+        </div>
+
+        <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow-sm">
+            <h3 class="text-lg font-semibold mb-4">Recent Products</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="text-sm text-gray-500 border-b">
+                        <tr>
+                            <th class="py-3">Name</th>    
+                            <th class="py-3">Price</th>
+                            <th class="py-3">Stock</th>
+                            <th class="py-3">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in recent_products|default([]) %}
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="py-3">{{ p.name }}</td>
+                            <td class="py-3">{{ p.price }}</td>
+                            <td class="py-3">{{ p.stock }}</td>
+                            <td class="py-3">
+                                <a href="/products/{{ p.id }}" class="text-blue-600 hover:underline">View</a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5" class="py-6 text-center text-sm text-gray-500">No recent products to show.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

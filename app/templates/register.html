@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="p-8">
+    <h1 class="text-3xl font-bold mb-6">Products</h1>
+    <a href="{{ url_for('product.add_product') }}" class="bg-green-600 text-white px-5 py-2 rounded mb-6 inline-block">
+    Add New Product
+</a>
+    Add New Product
+</a>
+    
+    <table class="w-full border-collapse border">
+        <thead>
+            <tr class="bg-gray-200">
+                <th class="border p-3">Name</th>
+                <th class="border p-3">Price</th>
+                <th class="border p-3">Stock</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td class="border p-3">{{ product.name }}</td>
+                <td class="border p-3">₹{{ product.price }}</td>
+                <td class="border p-3">{{ product.stock }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

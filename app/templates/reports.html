@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="max-w-7xl mx-auto">
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-semibold text-gray-800">Reports</h1>
+      <p class="text-sm text-gray-500 mt-1">Basic sales summary and recent transactions</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+    <div class="bg-white p-5 rounded-lg shadow-sm">
+      <div class="text-sm text-gray-500">Total Sales</div>
+      <div class="mt-2 text-2xl font-semibold text-gray-800">{{ total_sales }}</div>
+    </div>
+    <div class="bg-white p-5 rounded-lg shadow-sm">
+      <div class="text-sm text-gray-500">Total Revenue</div>
+      <div class="mt-2 text-2xl font-semibold text-gray-800">₹{{ '%.2f'|format(total_revenue) }}</div>
+    </div>
+  </div>
+
+  <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+    <div class="p-4 border-b">
+      <h3 class="text-lg font-semibold">Recent Sales</h3>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sale ID</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product ID</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Qty</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y">
+          {% for s in recent_sales %}
+          <tr class="hover:bg-gray-50">
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{ s.id }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ s.product_id }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ s.quantity }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">₹{{ '%.2f'|format(s.total_amount) }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ s.sale_date.strftime('%Y-%m-%d %H:%M') }}</td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="5" class="px-6 py-8 text-center text-sm text-gray-500">No sales to show.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

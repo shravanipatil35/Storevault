@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StoreVault - Professional Inventory System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; }
+        .sidebar { background: linear-gradient(to bottom, #1e2937, #111827); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="w-64 sidebar text-white flex flex-col">
+            <div class="p-6 border-b border-gray-700">
+                <h1 class="text-3xl font-bold flex items-center gap-3">
+                    <i class="fas fa-store"></i> 
+                    StoreVault
+                </h1>
+                <p class="text-xs text-gray-400 mt-1">Inventory Management</p>
+            </div>
+            
+            <nav class="flex-1 p-4">
+                <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 mb-1">
+                    <i class="fas fa-home w-5"></i> Dashboard
+                </a>
+                <a href="/products" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 mb-1">
+                    <i class="fas fa-box w-5"></i> Products
+                </a>
+                <a href="/sales/pos" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 mb-1">
+                    <i class="fas fa-cash-register w-5"></i> Point of Sale
+                </a>
+                <a href="/suppliers" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 mb-1">
+                    <i class="fas fa-truck w-5"></i> Suppliers
+                </a>
+                <a href="/reports" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700">
+                    <i class="fas fa-chart-bar w-5"></i> Reports
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Area -->
+        <div class="flex-1 flex flex-col">
+            <!-- Top Bar -->
+            <header class="bg-white border-b px-8 py-5 flex justify-between items-center shadow-sm">
+                <h2 class="text-2xl font-semibold text-gray-800">{% block title %}Dashboard{% endblock %}</h2>
+                
+                <div class="flex items-center gap-6">
+                    <span class="text-gray-600">
+                        Welcome, <b>{{ current_user.username if current_user.is_authenticated else 'Guest' }}</b>
+                    </span>
+                    <a href="/auth/logout" class="text-red-600 hover:text-red-700 flex items-center gap-2">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="flex-1 overflow-auto p-8">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="mb-6 p-4 rounded-xl text-white {{ 'bg-emerald-500' if category == 'success' else 'bg-red-500' }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}View Product{% endblock %}
+{% block content %}
+
+<div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow">
+    <div class="flex items-center justify-between mb-4">
+        <h2 class="text-2xl font-semibold">Product Details</h2>
+        <a href="{{ url_for('dashboard.index') }}" class="text-gray-600 hover:underline">Back</a>
+    </div>
+
+    <div class="divide-y">
+        <div class="py-3">
+            <div class="text-sm text-gray-500">Name</div>
+            <div class="text-base text-gray-800">{{ product.name }}</div>
+        </div>
+
+        <div class="py-3">
+            <div class="text-sm text-gray-500">Price</div>
+            <div class="text-base text-gray-800">₹{{ product.price }}</div>
+        </div>
+
+        <div class="py-3">
+            <div class="text-sm text-gray-500">Stock</div>
+            <div class="text-base text-gray-800">{{ product.stock }}</div>
+        </div>
+
+        <div class="py-3">
+            <div class="text-sm text-gray-500">Supplier</div>
+            <div class="text-base text-gray-800">{{ supplier.name if supplier else '-' }}</div>
+        </div>
+
+        <div class="py-3">
+            <div class="text-sm text-gray-500">Created At</div>
+            <div class="text-base text-gray-800">{{ product.created_at.strftime('%d %b %Y, %I:%M %p') if product.created_at else '-' }}</div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
