@@ -110,7 +110,7 @@ resource "aws_ecr_repository" "storevault" {
   }
 
   encryption_configuration {
-    encryption_type = algorithm.value
+    encryption_type = "AES256"
   }
 }
 
