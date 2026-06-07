@@ -66,7 +66,7 @@ resource "aws_db_instance" "postgres" {
   identifier             = "storevault-production-db"
   allocated_storage      = 20
   engine                 = "postgres"
-  engine_version         = "15.7"
+  engine_version         = "15.13"
   instance_class         = "db.t4g.micro"
   db_name                = "storevault"
   username               = var.db_username
