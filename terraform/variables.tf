@@ -6,15 +6,11 @@ variable "aws_region" {
 variable "db_username" {
   type        = string
   description = "Administrator username for RDS Postgres"
-  default     = "admin"
+  default     = "storevault_admin"
 }
 
 variable "db_password" {
   type        = string
   description = "Database master password"
   sensitive   = true
-}
-
-variable "algorith"{
-  type=string
 }
