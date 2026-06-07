@@ -8,11 +8,10 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = "storevault-bkt"
-    key            = "production/storevault-core/terraform.tfstate"
-    region         = "ap-south-1"
-    dynamodb_table = "storevault-terraform-state-locks"
-    encrypt        = true
+    bucket  = "storevault-bkt"
+    key     = "production/storevault-core/terraform.tfstate"
+    region  = "ap-south-1"
+    encrypt = true
   }
 }
 
