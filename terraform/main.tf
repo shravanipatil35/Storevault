@@ -66,7 +66,7 @@ resource "aws_db_instance" "postgres" {
   identifier             = "storevault-production-db"
   allocated_storage      = 20
   engine                 = "postgres"
-  engine_version         = "15.4"
+  engine_version         = "15.7"
   instance_class         = "db.t4g.micro"
   db_name                = "storevault"
   username               = var.db_username
@@ -81,7 +81,7 @@ module "eks" {
   version = "~> 19.0"
 
   cluster_name    = "storevault-production-cluster"
-  cluster_version = "1.28"
+  cluster_version = "1.30"
 
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
