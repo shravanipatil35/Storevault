@@ -88,6 +88,10 @@ module "eks" {
 
   enable_irsa = true
 
+  # UPDATE THESE TWO LINES:
+  cluster_endpoint_private_access = true
+  cluster_endpoint_public_access  = true
+
   eks_managed_node_groups = {
     production_nodes = {
       desired_size = 2
