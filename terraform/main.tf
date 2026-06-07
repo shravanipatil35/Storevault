@@ -8,9 +8,9 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = "storevault-remote-state-prod-storage"
+    bucket         = "storevault-bkt"
     key            = "production/storevault-core/terraform.tfstate"
-    region         = "us-east-1"
+    region         = "ap-south-1"
     dynamodb_table = "storevault-terraform-state-locks"
     encrypt        = true
   }
@@ -27,7 +27,7 @@ module "vpc" {
   name = "storevault-core-vpc"
   cidr = "10.0.0.0/16"
 
-  azs              = ["us-east-1a", "us-east-1b"]
+  azs              = ["ap-south-1a", "ap-south-1b"]
   private_subnets  = ["10.0.1.0/24", "10.0.2.0/24"]
   public_subnets   = ["10.0.101.0/24", "10.0.102.0/24"]
   database_subnets = ["10.0.201.0/24", "10.0.202.0/24"]
