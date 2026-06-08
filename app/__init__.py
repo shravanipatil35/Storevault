@@ -1,34 +1,35 @@
+import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from config import Config
-import os
 
+# Initialize extensions
 db = SQLAlchemy()
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 
-
-@login_manager.user_loader
-def load_user(user_id):
-    from app.models.user import User
-    return User.query.get(int(user_id))
-
-
 def create_app():
-    BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-
-    app = Flask(
-        __name__,
-        template_folder=os.path.join(BASE_DIR, "templates"),
-        static_folder=os.path.join(BASE_DIR, "static")
-    )
-
+    app = Flask(__name__)
+    
+    # 1. Apply configuration
     app.config.from_object(Config)
-
+    
+    # 2. Force Environment Variables (Essential for Kubernetes)
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'a-hard-coded-dev-key-123')
+    
+    # 3. Initialize extensions with the app
     db.init_app(app)
     login_manager.init_app(app)
 
+    # 4. Import models inside app context to ensure they register with db
+    with app.app_context():
+        from app.models.user import User
+        from app.models.product import Product # Add other models here
+        db.create_all()
+
+    # 5. Register Blueprints
     from app.routes.auth import auth_bp
     from app.routes.dashboard import dashboard_bp
     from app.routes.product import product_bp
@@ -44,3 +45,8 @@ def create_app():
     app.register_blueprint(reports_bp, url_prefix='/reports')
 
     return app
+
+@login_manager.user_loader
+def load_user(user_id):
+    from app.models.user import User
+    return User.query.get(int(user_id))
