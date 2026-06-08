@@ -4,10 +4,10 @@ metadata:
   name: storevault-internal-service
   namespace: default
 spec:
-  type: ClusterIP
-  ports:
-  - port: 80
-    targetPort: 5000
-    protocol: TCP
   selector:
-    app: storevault-web
+    app: storevault-app 
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000 
+  type: ClusterIP
