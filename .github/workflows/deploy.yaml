@@ -56,13 +56,17 @@ jobs:
           ECR_REPOSITORY: ${{ vars.ECR_REPO_NAME }}
           IMAGE_TAG: ${{ github.run_number }}
         run: |
-          # Remove the webhook configuration that is blocking your deployment
-          kubectl delete validatingwebhookconfigurations aws-load-balancer-webhook --ignore-not-found=true
-          kubectl delete mutatingwebhookconfigurations aws-load-balancer-webhook --ignore-not-found=true
+          # 1. Cleanup old resources that might be causing conflicts
+          kubectl delete svc storevault-service --ignore-not-found=true
           
-          # Apply your manifests
+          # 2. Apply your clean manifests
           kubectl apply -f k8s/
           
-          # Update image
+          # 3. Update the image
           kubectl set image deployment/storevault-deployment storevault-container=435240837203.dkr.ecr.ap-south-1.amazonaws.com/storevault:${{ github.run_number }}
-          kubectl rollout status deployment/storevault-deployment
+          
+          # 4. Restart to pick up changes
+          kubectl rollout restart deployment/storevault-deployment
+          
+          # 5. Wait for the rollout
+          kubectl rollout status deployment/storevault-deployment --timeout=2m
