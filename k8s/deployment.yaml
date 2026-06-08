@@ -24,5 +24,10 @@ spec:
             configMapKeyRef:
               name: db-config
               key: endpoint
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secrets
+              key: db_password
         - name: DATABASE_URL
-          value: "postgresql://storevault_admin:admin123@$(DB_ENDPOINT):5432/storevault"
+          value: "postgresql://storevault_admin:$(DB_PASSWORD)@$(DB_ENDPOINT):5432/storevault"
