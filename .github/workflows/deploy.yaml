@@ -57,13 +57,9 @@ jobs:
         run: |
           # 1. Apply manifests (ConfigMap, Service, etc)
           kubectl apply -f k8s/
-          
-          # 2. Update the deployment image specifically
+          # 2. Update the image
           kubectl set image deployment/storevault-deployment storevault-container=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          
-          # 3. Ensure the deployment uses the latest ConfigMap (triggers a rollout)
-          # This forces pods to restart if the ConfigMap changed
+          # 3. Force restart to refresh variables
           kubectl rollout restart deployment/storevault-deployment
-          
-          # 4. Wait for the rollout
+          # 4. Wait
           kubectl rollout status deployment/storevault-deployment --timeout=2m
