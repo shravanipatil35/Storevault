@@ -5,6 +5,9 @@ metadata:
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/healthcheck-port: "5000"
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
 spec:
   ingressClassName: alb
   rules:
