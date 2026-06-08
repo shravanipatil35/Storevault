@@ -18,9 +18,8 @@ spec:
         image: 435240837203.dkr.ecr.ap-south-1.amazonaws.com/storevault:latest
         ports:
         - containerPort: 5000
-        env:
-        - name: DB_ENDPOINT
-          valueFrom:
-            configMapKeyRef:
-              name: db-config
-              key: endpoint
+      - name: DB_ENDPOINT
+        valueFrom:
+          configMapKeyRef:
+          name: db-config
+          key: endpoint

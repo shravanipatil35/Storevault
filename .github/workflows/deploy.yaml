@@ -44,11 +44,10 @@ jobs:
       - name: Dynamic Token Replacement
         run: |
           RDS_ENDPOINT=$(aws rds describe-db-instances --db-instance-identifier storevault-production-db --region ${{ vars.AWS_REGION }} --query 'DBInstances[0].Endpoint.Address' --output text)
-          AWS_ACCOUNT_ID="435240837203"
-          sed -i "s/AWS_ACCOUNT_ID_PLACEHOLDER/$AWS_ACCOUNT_ID/g" k8s/serviceaccount.yaml
-          sed -i "s/AWS_ACCOUNT_ID_PLACEHOLDER/$AWS_ACCOUNT_ID/g" k8s/deployment.yaml
-          sed -i "s/AWS_REGION_PLACEHOLDER/${{ vars.AWS_REGION }}/g" k8s/deployment.yaml
-          sed -i "s|DATABASE_HOST_PLACEHOLDER|$RDS_ENDPOINT|g" k8s/deployment.yaml
+          
+          # Create a temporary ConfigMap to hold the RDS endpoint
+          # This is cleaner than sed-ing your deployment files
+          kubectl create configmap db-config --from-literal=endpoint=$RDS_ENDPOINT -o yaml --dry-run=client | kubectl apply -f -
 
       - name: Deploy to EKS
         env:
@@ -56,17 +55,15 @@ jobs:
           ECR_REPOSITORY: ${{ vars.ECR_REPO_NAME }}
           IMAGE_TAG: ${{ github.run_number }}
         run: |
-          # 1. Cleanup old resources that might be causing conflicts
-          kubectl delete svc storevault-service --ignore-not-found=true
-          
-          # 2. Apply your clean manifests
+          # 1. Apply manifests (ConfigMap, Service, etc)
           kubectl apply -f k8s/
           
-          # 3. Update the image
-          kubectl set image deployment/storevault-deployment storevault-container=435240837203.dkr.ecr.ap-south-1.amazonaws.com/storevault:${{ github.run_number }}
+          # 2. Update the deployment image specifically
+          kubectl set image deployment/storevault-deployment storevault-container=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           
-          # 4. Restart to pick up changes
+          # 3. Ensure the deployment uses the latest ConfigMap (triggers a rollout)
+          # This forces pods to restart if the ConfigMap changed
           kubectl rollout restart deployment/storevault-deployment
           
-          # 5. Wait for the rollout
+          # 4. Wait for the rollout
           kubectl rollout status deployment/storevault-deployment --timeout=2m
