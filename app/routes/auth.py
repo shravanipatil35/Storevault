@@ -11,15 +11,13 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
         user = User.query.filter_by(email=email).first()
-        
-        # Ensure user exists and password is valid
         if user and user.check_password(password):
-            login_user(user, remember=True) # remember=True keeps the session alive longer
+            login_user(user, remember=True)
             return redirect(url_for('dashboard.index'))
         else:
             flash('Invalid email or password', 'danger')
-            
-    return render_template('auth/login.html') # Ensure path matches your templates folder
+    # FIX: Changed from 'auth/login.html' to 'login.html'
+    return render_template('login.html')
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
@@ -27,13 +25,9 @@ def register():
         username = request.form.get('username')
         email = request.form.get('email')
         password = request.form.get('password')
-        
-        # Validation: Check if user exists
         if User.query.filter_by(email=email).first():
             flash('Email already registered', 'danger')
             return redirect(url_for('auth.register'))
-        
-        # Creation: Use a try/except block to catch database commit errors
         try:
             user = User(username=username, email=email)
             user.set_password(password)
@@ -43,8 +37,7 @@ def register():
             return redirect(url_for('auth.login'))
         except Exception as e:
             db.session.rollback()
-            current_app.logger.error(f"Registration failed: {e}")
             flash('An error occurred. Please try again.', 'danger')
             return redirect(url_for('auth.register'))
-    
-    return render_template('auth/register.html')
+    # FIX: Changed from 'auth/register.html' to 'register.html'
+    return render_template('register.html')
