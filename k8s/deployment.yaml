@@ -13,16 +13,22 @@ spec:
       labels:
         app: storevault-app
     spec:
-      containers:
-      - name: storevault-container
-        image: 435240837203.dkr.ecr.ap-south-1.amazonaws.com/storevault:latest
-        ports:
-        - containerPort: 5000
-        env:
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: db-secrets
-              key: db_password
-        - name: DATABASE_URL
-          value: "postgresql://storevault_admin:$(DB_PASSWORD)@storevault-production-db.cvo8e82yeor2.ap-south-1.rds.amazonaws.com:5432/storevault"
+  containers:
+  - name: storevault-container
+    image: 435240837203.dkr.ecr.ap-south-1.amazonaws.com/storevault:32
+    env:
+      - name: SECRET_KEY
+        valueFrom:
+          secretKeyRef:
+            name: db-secrets
+            key: SECRET_KEY
+      - name: DB_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: db-secrets
+            key: db_password
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: db-secrets
+            key: DATABASE_URL
