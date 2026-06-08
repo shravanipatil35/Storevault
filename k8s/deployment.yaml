@@ -15,6 +15,12 @@ spec:
     spec:
       containers:
       - name: storevault-container
-        image: your-docker-image-url:latest
+        image: 435240837203.dkr.ecr.ap-south-1.amazonaws.com/storevault:latest
         ports:
         - containerPort: 5000
+        env:
+        - name: DB_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: db-config
+              key: endpoint

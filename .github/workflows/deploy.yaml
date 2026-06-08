@@ -56,6 +56,6 @@ jobs:
           ECR_REPOSITORY: ${{ vars.ECR_REPO_NAME }}
           IMAGE_TAG: ${{ github.run_number }}
         run: |
-          kubectl apply -f k8s/
-          kubectl set image deployment/storevault-deployment application-container=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          kubectl rollout status deployment/storevault-deployment
+          kubectl apply -f k8s/deployment.yaml
+          kubectl apply -f k8s/service.yaml
+          kubectl apply -f k8s/serviceaccount.yaml
