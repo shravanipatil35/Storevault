@@ -56,6 +56,6 @@ jobs:
           ECR_REPOSITORY: ${{ vars.ECR_REPO_NAME }}
           IMAGE_TAG: ${{ github.run_number }}
         run: |
-          kubectl apply -f k8s/deployment.yaml
-          kubectl apply -f k8s/service.yaml
-          kubectl apply -f k8s/serviceaccount.yaml
+          kubectl delete deployment storevault-deployment --ignore-not-found=true
+          kubectl apply -f k8s/
+          kubectl rollout status deployment/storevault-deployment
