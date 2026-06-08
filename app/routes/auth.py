@@ -21,6 +21,7 @@ def login():
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
+    print("Register route accessed")  
     if request.method == 'POST':
         username = request.form.get('username')
         email = request.form.get('email')
@@ -30,14 +31,22 @@ def register():
             return redirect(url_for('auth.register'))
         try:
             user = User(username=username, email=email)
+            print(f"Creating user: {username}, {email}")
             user.set_password(password)
             db.session.add(user)
             db.session.commit()
             flash('Registration successful! Please login.', 'success')
             return redirect(url_for('auth.login'))
         except Exception as e:
+            print(f"Error during registration: {e}")
             db.session.rollback()
             flash('An error occurred. Please try again.', 'danger')
             return redirect(url_for('auth.register'))
     # FIX: Changed from 'auth/register.html' to 'register.html'
     return render_template('register.html')
+@auth_bp.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('You have been logged out.', 'info')
+    return redirect(url_for('auth.login'))
