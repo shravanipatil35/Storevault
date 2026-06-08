@@ -4,9 +4,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Config:
-    SECRET_KEY = os.getenv('SECRET_KEY', 'super-secret-key-12345')
-  
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL') 
-    
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+    if not SECRET_KEY:
+        raise ValueError("No SECRET_KEY set for Flask application")
+
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+    if not SQLALCHEMY_DATABASE_URI:
+        raise ValueError("No DATABASE_URL set for Flask application")
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    DEBUG = True
+    DEBUG = False 
