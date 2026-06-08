@@ -7,28 +7,14 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      app: storevault-web
+      app: storevault-app
   template:
     metadata:
       labels:
-        app: storevault-web
+        app: storevault-app
     spec:
-      serviceAccountName: storevault-execution-sa
       containers:
-      - name: application-container
-        image: AWS_ACCOUNT_ID_PLACEHOLDER.dkr.ecr.AWS_REGION_PLACEHOLDER.amazonaws.com/storevault:latest
-        imagePullPolicy: Always
+      - name: storevault-container
+        image: your-docker-image-url:latest
         ports:
         - containerPort: 5000
-        env:
-        - name: DATABASE_HOST
-          value: "DATABASE_HOST_PLACEHOLDER"
-        - name: DATABASE_NAME
-          value: "storevault"
-        - name: DATABASE_USER
-          value: "storevault_admin"
-        - name: DATABASE_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: storevault-database-credentials
-              key: password

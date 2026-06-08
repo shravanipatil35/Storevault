@@ -1,13 +1,17 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: storevault-internal-service
+  name: storevault-service
   namespace: default
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "external"
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
+    service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
 spec:
+  type: LoadBalancer
   selector:
-    app: storevault-app 
+    app: storevault-app
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 5000 
-  type: ClusterIP
+      targetPort: 5000
